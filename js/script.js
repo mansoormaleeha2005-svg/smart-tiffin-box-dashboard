@@ -1,3 +1,43 @@
+
+// Production Build - Smart Tiffin Box Dashboard
+// Build Date: 2026-05-07T19:29:25.365Z
+// Version: 1.0.0
+
+// Production optimizations
+(function() {
+    'use strict';
+    
+    // Disable console logs in production
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        console.log = function() {};
+        console.warn = function() {};
+        console.error = function() {};
+    }
+    
+    // Preload critical resources
+    function preloadResources() {
+        const resources = [
+            'css/style.css',
+            'js/script.js'
+        ];
+        
+        resources.forEach(resource => {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.href = resource;
+            link.as = resource.endsWith('.css') ? 'style' : 'script';
+            document.head.appendChild(link);
+        });
+    }
+    
+    // Initialize preloading
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', preloadResources);
+    } else {
+        preloadResources();
+    }
+})();
+
 // Smart Tiffin Box Dashboard JavaScript
 // Real-time monitoring and control system for ESP32-based smart tiffin box
 
@@ -1030,4 +1070,26 @@ document.addEventListener('DOMContentLoaded', () => {
 // Export for potential module usage
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = SmartTiffinBox;
+}
+
+
+// Production error handling
+window.addEventListener('error', function(e) {
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        // Log errors to service in production
+        console.error('Production Error:', e.error);
+    }
+});
+
+// Service Worker registration for PWA capabilities
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+            .then(function(registration) {
+                console.log('SW registered: ', registration);
+            })
+            .catch(function(registrationError) {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
 }
