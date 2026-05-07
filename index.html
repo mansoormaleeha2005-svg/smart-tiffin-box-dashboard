@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tiffin Box - Real-Time Food Monitoring System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <!-- IP Input Screen -->
+    <div id="ipInputScreen" class="ip-input-screen">
+        <div class="ip-input-content">
+            <div class="logo-section">
+                <div class="logo">🍱</div>
+                <h1>Smart Tiffin Box</h1>
+                <p>Enter your ESP32 IP Address</p>
+            </div>
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="esp32Ip">ESP32 IP Address:</label>
+                    <input type="text" id="esp32Ip" placeholder="192.168.1.100" maxlength="15">
+                    <div class="input-hint">Example: 192.168.1.100</div>
+                </div>
+                <div class="button-group">
+                    <button id="connectBtn" class="connect-btn">Connect</button>
+                    <button id="simulateBtn" class="simulate-btn">Run Simulation</button>
+                </div>
+            </div>
+            <div class="help-section">
+                <h3>How to find your ESP32 IP:</h3>
+                <ul>
+                    <li>Check your router's connected devices list</li>
+                    <li>Look for device named "ESP32" or "SmartTiffin"</li>
+                    <li>Use Arduino Serial Monitor to see IP on startup</li>
+                    <li>Default ESP32 AP mode: 192.168.4.1</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen hidden">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>Connecting to Smart Tiffin Box...</h2>
+            <p id="connectionMessage">Establishing connection...</p>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <div class="title-section">
+                    <h1 class="main-title">Smart Tiffin Box</h1>
+                    <p class="subtitle">Real-Time Food Monitoring System</p>
+                </div>
+                <div class="status-indicator">
+                    <div class="status-dot" id="connectionStatus"></div>
+                    <span id="statusText">ONLINE</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Grid Layout -->
+        <main class="main-content">
+            <!-- Temperature Card -->
+            <div class="card temperature-card">
+                <div class="card-header">
+                    <h3>Filament Plate Temperature</h3>
+                    <div class="icon">🌡️</div>
+                </div>
+                <div class="card-body">
+                    <div class="temperature-display">
+                        <div class="temp-value" id="temperature">--°C</div>
+                        <div class="temp-gauge">
+                            <svg class="gauge" viewBox="0 0 200 200">
+                                <circle class="gauge-bg" cx="100" cy="100" r="90"/>
+                                <circle class="gauge-fill" id="tempGauge" cx="100" cy="100" r="90"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="temp-status" id="tempStatus">Normal</div>
+                </div>
+            </div>
+
+            <!-- Water Leakage Card -->
+            <div class="card leakage-card">
+                <div class="card-header">
+                    <h3>Water Leakage Detection</h3>
+                    <div class="icon" id="leakIcon">💧</div>
+                </div>
+                <div class="card-body">
+                    <div class="leakage-status" id="leakageStatus">
+                        <span class="status-text">NO WATER LEAKAGE</span>
+                    </div>
+                    <div class="leakage-indicator" id="leakageIndicator"></div>
+                </div>
+            </div>
+
+            <!-- Heater Control Card -->
+            <div class="card heater-card">
+                <div class="card-header">
+                    <h3>Heater Control</h3>
+                    <div class="icon" id="heaterIcon">🔥</div>
+                </div>
+                <div class="card-body">
+                    <div class="heater-toggle">
+                        <label class="switch">
+                            <input type="checkbox" id="heaterToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="heater-status" id="heaterStatus">Heater OFF</div>
+                </div>
+            </div>
+
+            <!-- MOSFET Status Card -->
+            <div class="card mosfet-card">
+                <div class="card-header">
+                    <h3>MOSFET Status</h3>
+                    <div class="icon">⚡</div>
+                </div>
+                <div class="card-body">
+                    <div class="mosfet-status" id="mosfetStatus">
+                        <span class="status-text">MOSFET NOT PRODUCING HEAT</span>
+                    </div>
+                    <div class="circuit-animation" id="circuitAnimation"></div>
+                </div>
+            </div>
+
+            <!-- Safety Status Card -->
+            <div class="card safety-card">
+                <div class="card-header">
+                    <h3>Safety Status</h3>
+                    <div class="icon" id="safetyIcon">🛡️</div>
+                </div>
+                <div class="card-body">
+                    <div class="safety-status" id="safetyStatus">
+                        <span class="status-text">SAFE</span>
+                    </div>
+                    <div class="safety-indicator" id="safetyIndicator"></div>
+                </div>
+            </div>
+
+            <!-- Live Activity Section -->
+            <div class="card activity-card full-width">
+                <div class="card-header">
+                    <h3>Live Activity Feed</h3>
+                    <div class="icon">📊</div>
+                </div>
+                <div class="card-body">
+                    <div class="activity-feed" id="activityFeed">
+                        <div class="activity-item">
+                            <span class="timestamp">00:00:00</span>
+                            <span class="message">System initialized</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Floating Status Orb -->
+        <div class="floating-orb" id="floatingOrb">
+            <div class="orb-inner"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
