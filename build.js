@@ -6,8 +6,8 @@ const path = require('path');
 // Build script for Smart Tiffin Box Dashboard
 console.log('🚀 Building Smart Tiffin Box Dashboard for deployment...');
 
-// Create dist directory
-const distDir = path.join(__dirname, 'dist');
+// Create public directory for Vercel
+const distDir = path.join(__dirname, 'public');
 if (!fs.existsSync(distDir)) {
     fs.mkdirSync(distDir, { recursive: true });
 }
