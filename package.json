@@ -24,16 +24,13 @@
   "author": "Smart Tiffin Box Team",
   "license": "MIT",
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "html-minifier": "^4.0.0",
-    "clean-css-cli": "^5.6.3",
-    "terser": "^5.19.2"
+    "http-server": "^14.1.1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/smart-tiffin-box-dashboard.git"
+    "url": "https://github.com/mansoormaleeha2005-svg/smart-tiffin-box-dashboard.git"
   },
-  "homepage": "https://your-username.github.io/smart-tiffin-box-dashboard",
+  "homepage": "https://mansoormaleeha2005-svg.github.io/smart-tiffin-box-dashboard",
   "engines": {
     "node": ">=14.0.0"
   }
